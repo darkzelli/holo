@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:holo/pages/file.dart';
-import 'package:holo/pages/nofile.dart';
-import 'package:xterm/xterm.dart';
+import 'package:holo/pages/no_file.dart';
+import 'package:holo/pages/settings.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,19 +19,6 @@ class _MyAppState extends State<MyApp> {
   final PageController _pageController = PageController(
     initialPage: 0,
   );
-  late Terminal terminal;
-  final terminalController = TerminalController();
-  @override
-  void initState(){
-    super.initState();
-    terminal = Terminal(
-    maxLines: 1000,
-    onOutput: (String data) {
-      terminal.write(data);
-    },
-    );
-  }
-   
 
    @override
   void dispose() {
@@ -46,16 +33,20 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         backgroundColor: Color.fromRGBO(19, 18, 18, 1),
         body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
           children: [
-            
-            TerminalView(
-              terminal,
-              controller: terminalController,
-            )
+            NoFile(pageController: _pageController),
+            File(),
+            Settings()
           ],
         ),
+        bottomNavigationBar: Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Text("holo 0.1", style: TextStyle(color: Color.fromARGB(255, 73, 62, 124)),),
+                ),
       ),
+      
     );
   }
 }
