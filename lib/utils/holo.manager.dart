@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 class HoloManger{
     static HoloManger? _instance;
-    static String currentDirectory = "";
+    static final ValueNotifier<String?> currentDirectory = ValueNotifier<String?>(null);
     static final ValueNotifier<String?> selectedFile = ValueNotifier<String?>(null);
 
     HoloManger._private();
@@ -15,7 +15,7 @@ class HoloManger{
     } 
 
     static void updateCurrentDirectory(String newPath){
-      currentDirectory = newPath;
+      currentDirectory.value = newPath;
     }
 
     static void updateSelectedFile(String newFile){

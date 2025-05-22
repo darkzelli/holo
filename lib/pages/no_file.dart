@@ -1,9 +1,8 @@
 
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:holo/utils/holo.manager.dart';
-import 'package:holo/widgets/nofile/option.dart';
+import 'package:holo/utils/file.util.dart';
+import 'package:holo/widgets/no_file/option.dart';
 class NoFile extends StatefulWidget {
   final PageController pageController;
   const NoFile({super.key, required this.pageController});
@@ -16,15 +15,11 @@ class NoFile extends StatefulWidget {
 
 
 class _NoFileState extends State<NoFile> {
+  void pickFile(){
+    FileUtils.filepicker(widget.pageController);
+  }
+
   
-  void filepicker() async {
-    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-    if (selectedDirectory != null) {
-        HoloManger.updateCurrentDirectory(selectedDirectory);
-        widget.pageController.jumpToPage(1); 
-    }
-  
-  } 
   
   @override
   Widget build(BuildContext context) {
@@ -35,8 +30,8 @@ class _NoFileState extends State<NoFile> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset("lib/assets/icon/holoASCII.png"),
-            Option(iconUni: 0xe2a3, text: "Open a File", keymap: "G", function: filepicker,),
+            Image.asset("lib/assets/images/holoASCII.png"),
+            Option(iconUni: 0xe2a3, text: "Open a File", keymap: "G", function: pickFile),
             Option(iconUni: 0xf04ff, text: "Open a Recent Files", keymap: "R",),
             Option(iconUni: 0xe57f, text: "Settings", keymap: "T", function: () => widget.pageController.jumpToPage(2),),
             Option(iconUni: 0xe2ea, text: "Projects", keymap: "p",)

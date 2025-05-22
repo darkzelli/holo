@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holo/utils/holo.manager.dart';
-import 'package:holo/widgets/file/file.util.dart';
+import 'package:holo/utils/file.util.dart';
 class FileNodeWidget extends StatefulWidget {
   final String name;
   final FileNode fileNode;
@@ -11,7 +11,7 @@ class FileNodeWidget extends StatefulWidget {
 }
 
 class _FileNodeWidgetState extends State<FileNodeWidget> {
-  late int? ext;
+  late dynamic ext;
   @override
   void initState(){
     super.initState();
@@ -25,16 +25,19 @@ class _FileNodeWidgetState extends State<FileNodeWidget> {
       valueListenable:  HoloManger.selectedFile,
       builder: (BuildContext context, dynamic value, Widget? child) {
         bool selected = value == widget.name;
-        return GestureDetector(
-          onDoubleTap: () => setState(() {
-            HoloManger.updateSelectedFile(widget.name);
-          }),
-          child: Row(
-            children: [
-              ext != null ? Icon(IconData(ext!, fontFamily: "Devicon"), color: Colors.white, size: 16) : Icon(Icons.align_horizontal_left, color: Colors.white, size: 16,),
-              SizedBox(width: 5),
-              Text(widget.name , style: TextStyle(color: selected ? Colors.deepPurpleAccent : Colors.white), textAlign: TextAlign.left,),
-            ],
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onDoubleTap: () => setState(() {
+              HoloManger.updateSelectedFile(widget.name);
+            }),
+            child: Row(
+              children: [
+                ext != null ? Icon(IconData(ext!['codePoint'], fontFamily: ext!['fontFamily']), color: ext!['Color'], size: 16) : Icon(Icons.align_horizontal_left, color: Colors.white, size: 16,),
+                SizedBox(width: 5),
+                Text(widget.name , style: TextStyle(color: selected ? Colors.deepPurpleAccent : Colors.white), textAlign: TextAlign.left,),
+              ],
+            ),
           ),
         );
       },

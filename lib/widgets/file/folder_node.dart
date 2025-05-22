@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:holo/widgets/file/file.util.dart';
+import 'package:holo/utils/file.util.dart';
 class FolderNodeWidget extends StatefulWidget {
   final String name;
   final List<FileNode> files;
@@ -23,19 +23,22 @@ class _FolderNodeWidgetState extends State<FolderNodeWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              isExpanded = !isExpanded;
-            });
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(isExpanded ? Icons.folder_open : Icons.folder, color: const Color.fromARGB(255, 201, 20, 147), size: 16,),
-              SizedBox(width: 4.0,),
-              Text(widget.name, style: TextStyle(color: Colors.white, fontSize: 13), textAlign: TextAlign.left,),
-            ],
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                isExpanded = !isExpanded;
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(isExpanded ? Icons.folder_open : Icons.folder, color: const Color.fromARGB(255, 201, 20, 147), size: 16,),
+                SizedBox(width: 4.0,),
+                Text(widget.name, style: TextStyle(color: Color.fromARGB(255, 149, 178, 252), fontSize: 13), textAlign: TextAlign.left,),
+              ],
+            ),
           ),
         ),
         if (isExpanded) Container(

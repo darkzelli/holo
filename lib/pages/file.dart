@@ -9,17 +9,15 @@ class File extends StatefulWidget {
 }
 
 class _FileState extends State<File> {
-  late String currentDirectory;
-
-
-  @override
-  void initState(){
-    super.initState();
-    currentDirectory = HoloManger.currentDirectory;
-    
-  }
   @override
   Widget build(BuildContext context) {
-    return FileTreeWidget();
+    return ValueListenableBuilder(
+      valueListenable: HoloManger.currentDirectory, 
+      builder: (BuildContext context, dynamic value, Widget? child){
+        return FileTreeWidget();
+      }
+      );
+    
+    
   }
 }

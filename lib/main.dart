@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:holo/pages/file.dart';
 import 'package:holo/pages/no_file.dart';
 import 'package:holo/pages/settings.dart';
+import 'package:holo/utils/holo.manager.dart';
+
+import 'dart:io';
+
+import 'package:holo/utils/file.util.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,10 +25,15 @@ class _MyAppState extends State<MyApp> {
     initialPage: 0,
   );
 
-   @override
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState(){
+    super.initState();
   }
 
   @override
@@ -49,7 +59,32 @@ class _MyAppState extends State<MyApp> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("", style: TextStyle(color: Color.fromARGB(255, 73, 62, 124)),),
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: (){
+                    FileUtils.filepicker(_pageController);
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.folder_special, color: Color.fromARGB(255, 73, 62, 124),),
+                      SizedBox(width: 8,),
+                      ValueListenableBuilder<String?>(
+                        valueListenable: HoloManger.currentDirectory,
+                        builder: (BuildContext context, dynamic value, Widget? child){
+                          String? directoryName = "";
+                          String? currentDirectory = HoloManger.currentDirectory.value;
+                          if(currentDirectory != null){
+                             Directory directory = Directory(currentDirectory) ;
+                            directoryName = directory.path.split(Platform.pathSeparator).last;
+                          }
+                          return Text(directoryName, style: TextStyle(color: Color.fromARGB(255, 73, 62, 124)));
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               Row(
                 children: [
                   Text("holo", style: TextStyle(color: Color.fromARGB(255, 73, 62, 124)),),
