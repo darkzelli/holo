@@ -3,8 +3,7 @@ import 'package:holo/widgets/file/file.util.dart';
 class FolderNodeWidget extends StatefulWidget {
   final String name;
   final List<FileNode> files;
-  final double offset;
-  const FolderNodeWidget({super.key, required this.name, required this.files, required this.offset});
+  const FolderNodeWidget({super.key, required this.name, required this.files});
 
   @override
   State<FolderNodeWidget> createState() => _FolderNodeWidgetState();
@@ -13,6 +12,7 @@ class FolderNodeWidget extends StatefulWidget {
 
 
 class _FolderNodeWidgetState extends State<FolderNodeWidget> {
+  bool isExpanded = false;
 
   @override
   void initState() {
@@ -23,14 +23,23 @@ class _FolderNodeWidgetState extends State<FolderNodeWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Icon(Icons.expand_more, color: Colors.white,),
-            Text(widget.name + widget.offset.toString(), style: TextStyle(color: Colors.white), textAlign: TextAlign.left,),
-          ],
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              isExpanded = !isExpanded;
+            });
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(isExpanded ? Icons.folder_open : Icons.folder, color: const Color.fromARGB(255, 201, 20, 147), size: 16,),
+              SizedBox(width: 4.0,),
+              Text(widget.name, style: TextStyle(color: Colors.white, fontSize: 13), textAlign: TextAlign.left,),
+            ],
+          ),
         ),
-        Container(
-          margin: EdgeInsets.only(left: widget.offset * 2), 
+        if (isExpanded) Container(
+          margin: EdgeInsets.only(left: 10), 
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: widget.files.map((file) => file.widget).toList(),

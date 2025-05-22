@@ -1,45 +1,52 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:holo/widgets/file/file_node.dart';
 import 'package:holo/widgets/file/folder_node.dart';
 
-class FileNode{
-  late String? type;
-  late String name;
-  late int? iconCodePoint;
-  Widget widget;
+class FileUtils{
+  static var fileIconMap = HashMap<String, int>.from({
+    'js': 0xea81,
+    'ts': 0xec63,
+    'dart': 0xe9aa,
+    'py': 0xeb9c,
+    'swift': 0xec34,
+    'rs': 0xebe6,
+    'tailwind.css': 0xec39,
+    'html': 0xea67,
+    'java': 0xea7f,
+    'cs': 0xe9a0,
+    'c': 0xe998,
+    'cpp': 0xe99a,
+  });
 
-  FileNode(this.type, this.name, this.iconCodePoint) : widget = FileNodeWidget(name: name, icon: iconCodePoint);
-  @override
-String toString() {
-  return name;
+
 }
+
+class FileNode{
+  late String name;
+  late Widget widget;
+
+  FileNode(this.name) {
+    widget = FileNodeWidget(name: name, fileNode: this); 
+  }
+  @override
+  String toString() {
+    return name;
+  }
 }
 
 class FolderNode extends FileNode{
   List<FileNode> files = [];
-  late double offset;
+
   @override
-  FolderNode( String? type, String name, int? icon, this.offset)
-    : super( type, name, icon) {
-    widget = FolderNodeWidget(name: name, files: files, offset: offset);
+  FolderNode( String name)
+    : super( name) {
+    widget = FolderNodeWidget(name: name, files: files);
   }
 
-  void setFiles(List<FileNode> files){
+  void setFiles(List<FileNode> files) {
     this.files = files;
   }
-  @override
-String toString([int indentLevel = 0]) {
-  final indent = '  ' * indentLevel;
-  final buffer = StringBuffer();
-
-  buffer.writeln('$indent--- $name');
-  for (var file in files) {
-    if (file is FolderNode) {
-      buffer.write(file.toString(indentLevel + 1));
-    } else {
-      buffer.writeln('${'  ' * (indentLevel + 1)}-- ${file.name}');
-    }
-  }
-  return buffer.toString();
-}
+  
 }

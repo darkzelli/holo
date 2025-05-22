@@ -15,7 +15,7 @@ class _FileState extends State<File> {
   @override
   void initState(){
     super.initState();
-    currentDirectory = HoloManger.getInstance().currentDirectory;
+    currentDirectory = HoloManger.currentDirectory;
     
   }
   @override

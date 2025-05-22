@@ -15,7 +15,7 @@ class FileTreeWidget extends StatefulWidget {
 class _FileTreeWidgetState extends State<FileTreeWidget> {
 
   Future<FolderNode> traverseFilesDFS(Directory dir ) async {
-    FolderNode root = FolderNode(null, dir.path.split(Platform.pathSeparator).last, 1.0);
+    FolderNode root = FolderNode(dir.path.split(Platform.pathSeparator).last);
     HoloStackNode node = HoloStackNode(dir, null);
     HoloStack stack = HoloStack();
 
@@ -30,10 +30,10 @@ class _FileTreeWidgetState extends State<FileTreeWidget> {
       if(entity is Directory){
         FolderNode folder;
         if(current.secondValue == null){
-          folder = FolderNode(null, entity.path.split(Platform.pathSeparator).last, 10.0);
+          folder = FolderNode(entity.path.split(Platform.pathSeparator).last);
           root.files.add(folder);
         }else{
-          folder = FolderNode(null, entity.path.split(Platform.pathSeparator).last, current.secondValue.offset + 10.0);
+          folder = FolderNode(entity.path.split(Platform.pathSeparator).last);
           current.secondValue.files.add(folder);
         }
         for(var subEntity in entity.listSync()){
@@ -42,10 +42,10 @@ class _FileTreeWidgetState extends State<FileTreeWidget> {
       }else if( entity is File){
         FileNode file;
         if(current.secondValue == null){
-          file = FileNode(null, entity.uri.pathSegments.last);
+          file = FileNode(entity.uri.pathSegments.last);
           root.files.add(file);
         }else{
-          file = FileNode(null, entity.uri.pathSegments.last);
+          file = FileNode(entity.uri.pathSegments.last);
           current.secondValue.files.add(file);
         }
       }
@@ -54,7 +54,7 @@ class _FileTreeWidgetState extends State<FileTreeWidget> {
     return root;
   }
   Future<FolderNode> generateFileTreeData() async{
-    String currentDirectory = HoloManger.getInstance().currentDirectory;
+    String currentDirectory = HoloManger.currentDirectory;
     Directory directory = Directory(currentDirectory);
     return await traverseFilesDFS(directory);
   }
@@ -69,25 +69,28 @@ class _FileTreeWidgetState extends State<FileTreeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: FutureBuilder<FolderNode>(
-        future: _uiConfig,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData ) {
-            return Center(child: Text('No items found.'));
-          } else {
-            final nodes = snapshot.data!;
-            return ListView(
-              children: [
-                nodes.widget
-              ],
-            );
-          }
-        },
+    return Padding(
+      padding: const EdgeInsets.only(top: 35, bottom: 35, left: 15),
+      child: SizedBox(
+        child: FutureBuilder<FolderNode>(
+          future: _uiConfig,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData ) {
+              return Center(child: Text('No items found.'));
+            } else {
+              final nodes = snapshot.data!;
+              return ListView(
+                children: [
+                  nodes.widget
+                ],
+              );
+            }
+          },
+        ),
       ),
     );
   }

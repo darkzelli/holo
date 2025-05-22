@@ -20,7 +20,7 @@ class _NoFileState extends State<NoFile> {
   void filepicker() async {
     String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
     if (selectedDirectory != null) {
-        HoloManger.getInstance().updateCurrentDirectory(selectedDirectory);
+        HoloManger.updateCurrentDirectory(selectedDirectory);
         widget.pageController.jumpToPage(1); 
     }
   
@@ -35,6 +35,7 @@ class _NoFileState extends State<NoFile> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Image.asset("lib/assets/icon/holoASCII.png"),
             Option(iconUni: 0xe2a3, text: "Open a File", keymap: "G", function: filepicker,),
             Option(iconUni: 0xf04ff, text: "Open a Recent Files", keymap: "R",),
             Option(iconUni: 0xe57f, text: "Settings", keymap: "T", function: () => widget.pageController.jumpToPage(2),),
